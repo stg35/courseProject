@@ -32,7 +32,7 @@ void MainWindow::slotReadyRead()
         ui->textBrowser->append(str);
 
     } else {
-        ui->textBrowser->append("read error");
+        ui->textBrowser->append("read error!");
     }
 }
 
