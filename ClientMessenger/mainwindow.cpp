@@ -1,14 +1,16 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 
-MainWindow::MainWindow(QWidget *parent)
+MainWindow::MainWindow(QString s, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+    , username(s)
 {
     ui->setupUi(this);
-    auto socket = std::make_unique<QTcpSocket>(this);
-    connect(socket.get(), &QTcpSocket::readyRead, this, &MainWindow::slotReadyRead);
-    connect(socket.get(), &QTcpSocket::disconnected, socket.get(), &QTcpSocket::deleteLater);
+    socket = new QTcpSocket(this);
+    connect(socket, &QTcpSocket::readyRead, this, &MainWindow::slotReadyRead);
+    connect(socket, &QTcpSocket::disconnected, socket, &QTcpSocket::deleteLater);
+    socket->connectToHost("127.0.0.1", 2323);
 }
 
 MainWindow::~MainWindow()
@@ -16,21 +18,16 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-
-void MainWindow::on_pushButton_clicked()
-{
-    socket->connectToHost("127.0.0.1", 2323);
-}
-
-
 void MainWindow::slotReadyRead()
 {
     QDataStream in(socket);
+    in.setVersion(QDataStream::Qt_6_2);
     if(in.status() == QDataStream::Ok) {
         QString str;
-        in >> str;
-        ui->textBrowser->append(str);
-
+        QString name;
+        QTime time;
+        in >> time >> name >> str;
+        ui->textBrowser->append(time.toString() + " @" + name + ": " + str);
     } else {
         ui->textBrowser->append("read error!");
     }
@@ -39,20 +36,22 @@ void MainWindow::slotReadyRead()
 
 void MainWindow::on_pushButton_2_clicked()
 {
-    SendToServer(ui->lineEdit->text());
+    SendToServer(ui->lineEdit->text(), username);
 }
 
 
 void MainWindow::on_lineEdit_returnPressed()
 {
-    SendToServer(ui->lineEdit->text());
+    SendToServer(ui->lineEdit->text(), username);
 }
 
-void MainWindow::SendToServer(QString str)
+void MainWindow::SendToServer(QString str, QString name)
 {
     Data.clear();
     QDataStream out(&Data, QIODevice::WriteOnly);
-    out << str;
+    out.setVersion(QDataStream::Qt_6_2);
+    out << QTime::currentTime() << name << str;
     socket->write(Data);
+    ui->lineEdit->clear();
 }
 

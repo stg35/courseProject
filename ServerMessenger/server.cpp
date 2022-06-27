@@ -10,32 +10,36 @@ Server::Server()
 }
 
 void Server::incomingConnection(qintptr socketDescriptor) {
-    std::unique_ptr<QTcpSocket> socket;
+    socket = new QTcpSocket;
     socket->setSocketDescriptor(socketDescriptor);
-    connect(socket.get(), &QTcpSocket::readyRead, this, &Server::slotReadyRead);
-    connect(socket.get(), &QTcpSocket::disconnected, socket.get(), &QTcpSocket::deleteLater);
-    Sockets.push_back(socket.get());
+    connect(socket, &QTcpSocket::readyRead, this, &Server::slotReadyRead);
+    connect(socket, &QTcpSocket::disconnected, socket, &QTcpSocket::deleteLater);
+    Sockets.push_back(socket);
     qDebug() << "client connected: " << socketDescriptor;
 }
 
 void Server::slotReadyRead() {
     socket = (QTcpSocket*)sender();
     QDataStream in(socket);
+    in.setVersion(QDataStream::Qt_6_2);
     if(in.status() == QDataStream::Ok) {
         qDebug() << "read...";
         QString str;
-        in >> str;
-        qDebug() << str;
-        SendToClient(str);
+        QString name;
+        QTime time;
+        in >> time >> name >> str;
+        qDebug() << str << " " << name;
+        SendToClient(str, name);
     } else {
         qDebug() << "DataStream error";
     }
 }
 
-void Server::SendToClient(QString str) {
+void Server::SendToClient(QString str, QString name) {
     Data.clear();
     QDataStream out(&Data, QIODevice::WriteOnly);
-    out << str;
+    out.setVersion(QDataStream::Qt_6_2);
+    out << QTime::currentTime() << name << str;
     for(size_t i = 0; i < Sockets.size(); i++) {
         Sockets[i]->write(Data);
     }

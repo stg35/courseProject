@@ -3,6 +3,7 @@
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <QVector>
+#include <QTime>
 
 class Server : public QTcpServer
 {
@@ -14,7 +15,7 @@ public:
 private:
     QVector<QTcpSocket*> Sockets;
     QByteArray Data;
-    void SendToClient(QString str);
+    void SendToClient(QString str, QString name);
 
 public slots:
     void incomingConnection(qintptr socketDescriptor);

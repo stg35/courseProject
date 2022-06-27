@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 #include <QTcpSocket>
+#include <QTime>
+#include <QMainWindow>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -13,11 +15,10 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
+    MainWindow(QString s = "", QWidget *parent = nullptr);
     ~MainWindow();
 
 private slots:
-    void on_pushButton_clicked();
 
     void on_pushButton_2_clicked();
 
@@ -27,7 +28,9 @@ private:
     Ui::MainWindow *ui;
     QTcpSocket *socket;
     QByteArray Data;
-    void SendToServer(QString str);
+    void SendToServer(QString str, QString name);
+    quint16 nextBlockSize;
+    QString username;
 
 public slots:
     void slotReadyRead();

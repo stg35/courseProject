@@ -20,6 +20,10 @@ set(PROJECT_SOURCES
         mainwindow.cpp
         mainwindow.h
         mainwindow.ui
+        auth.h
+        auth.cpp
+        auth.ui
+        resources.qrc
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
