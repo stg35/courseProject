@@ -18,7 +18,14 @@ private:
     void SendToClient(QString str, QString name);
 
 public slots:
+    /**
+     * @brief Обрабатывает входящие соединения
+     * @param socketDescriptor: уникальный id веб-сокета
+     */
     void incomingConnection(qintptr socketDescriptor);
+    /**
+     * @brief Обрабатывает входящие веб-сокеты
+     */
     void slotReadyRead();
 
 };

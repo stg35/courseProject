@@ -15,6 +15,11 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
+    /**
+     * @brief Конструктор для окна чата
+     * @param s: имя введенное пользователем
+     * @param parent: родительское окно
+     */
     MainWindow(QString s = "", QWidget *parent = nullptr);
     ~MainWindow();
 
@@ -28,11 +33,19 @@ private:
     Ui::MainWindow *ui;
     QTcpSocket *socket;
     QByteArray Data;
+    /**
+     * @brief Отправка данных на сервер
+     * @param str: сообщение
+     * @param name: имя пользователя
+     */
     void SendToServer(QString str, QString name);
     quint16 nextBlockSize;
     QString username;
 
 public slots:
+    /**
+     * @brief Функция, обрабатывающая входящие веб-сокеты
+     */
     void slotReadyRead();
 };
 #endif // MAINWINDOW_H
