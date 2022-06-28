@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.5)
 
 project(ClientMessenger VERSION 0.1 LANGUAGES CXX)
 
+enable_testing()
+
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 set(CMAKE_AUTOUIC ON)
@@ -14,6 +16,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 find_package(Qt6 REQUIRED COMPONENTS Network)
+find_package(Catch2 3 REQUIRED)
 
 set(PROJECT_SOURCES
         main.cpp
@@ -25,6 +28,14 @@ set(PROJECT_SOURCES
         auth.ui
         resources.qrc
 )
+
+if(CMAKE_TESTING_ENABLED)
+    add_subdirectory(m_tests)
+endif()
+
+
+
+
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(ClientMessenger
@@ -50,6 +61,7 @@ else()
 endif()
 
 target_link_libraries(ClientMessenger PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt6::Network)
+
 
 set_target_properties(ClientMessenger PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com

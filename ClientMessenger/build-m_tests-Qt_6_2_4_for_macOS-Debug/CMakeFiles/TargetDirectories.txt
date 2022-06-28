@@ -1,0 +1,4 @@
+/Users/stg/C++/CourseProject/ClientMessenger/build-m_tests-Qt_6_2_4_for_macOS-Debug/CMakeFiles/rebuild_cache.dir
+/Users/stg/C++/CourseProject/ClientMessenger/build-m_tests-Qt_6_2_4_for_macOS-Debug/CMakeFiles/edit_cache.dir
+/Users/stg/C++/CourseProject/ClientMessenger/build-m_tests-Qt_6_2_4_for_macOS-Debug/CMakeFiles/test.dir
+/Users/stg/C++/CourseProject/ClientMessenger/build-m_tests-Qt_6_2_4_for_macOS-Debug/CMakeFiles/m_tests.dir
